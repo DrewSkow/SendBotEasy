@@ -1,0 +1,31 @@
+{
+    "manifest_version": 3,
+    "name": "Send Admire Messages Bot Easy",
+    "description" : "Srcipt for sending admire messegas in chat",
+    "version" : "1.0.1",
+    "author": "Drew Skow",
+    "content_scripts": [
+        {
+            "matches" : ["<all_urls>"],
+            "js"  : ["script.js"],
+            "run_at": "document_end"
+        }
+    ],
+    "action" : {
+        "default_title" : "SendBot",
+        "default_icon" : "icon.png",
+        "default_popup": "popup.html",
+        "default_script": "js.js"
+    },
+
+    "background" :{
+        "service_worker" : "bg.js"
+    },
+
+    "permissions" : [
+        "activeTab",
+        "tabs",
+        "storage"
+    ]
+}
+
