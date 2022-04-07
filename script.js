@@ -145,7 +145,7 @@ const script = () => {
 
         case "/clagt/admire/search_matches3.php" :
             openAllMen();
-            delay(7000).then(() => switchPage());
+            delay(23000).then(() => switchPage());
             break;
 
         case "/clagt/admire/adr_succ2.php":
