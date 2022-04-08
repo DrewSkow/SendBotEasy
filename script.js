@@ -109,15 +109,12 @@ const script = () => {
 
     const checkSentMail = (search10) => {
         let check = 0;
-        let check10 = 0;
         // points started frow 2 column. 
         if(search10.children[1].innerHTML === "-" || +search10.children[1].innerHTML <=15){check++};
-        if(search10.children[1].innerHTML === "10"){check10++};
         for(let i = 2; i < 8; i++){
-            if(+search10.children[i].innerHTML == 10){check10++};
-            if(+search10.children[i].innerHTML <= 15){check++};
+            if(+search10.children[i].innerHTML >= 10 && +search10.children[i].innerHTML <=15){check++};
         }
-        if(check===7 && check10>3){
+        if(check===7){
             changeTypeOfLetter();
         } else {window.close()}
     }
