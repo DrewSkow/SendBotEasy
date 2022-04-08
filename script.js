@@ -71,6 +71,9 @@ const script = () => {
     }
 
     const switchPage = () => {
+        if(+localStorage.getItem("sended") >= 50){
+            chrome.runtime.sendMessage({method: "closeTabs"}, ()=>window.reload());
+        }
         const nextButton = document.querySelectorAll("table")[25].children[0].children[0].children[1].children[3];
         const firstButton = document.querySelectorAll("table")[25].children[0].children[0].children[1].children[1];
         if(!nextButton.children[0]){
