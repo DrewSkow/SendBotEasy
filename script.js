@@ -1,16 +1,15 @@
-const checkSended = () => {
-    chrome.runtime.sendMessage({method: "closeTabs"}, ()=>{
-        localStorage.clear();
-        window.location.href="/clagt/woman/women_profiles_allow_edit.php";
+const delay = async (ms) => await new Promise(resolve => setTimeout(resolve, ms));
+
+if(+localStorage.getItem("sended") >= 50 && document.location.pathname=="/clagt/woman/women_profiles_allow_edit.php"){
+    delay(10000).then(()=>{
+        chrome.runtime.sendMessage({method: "closeTabs"}, ()=>{
+            window.location.href="/clagt/woman/women_profiles_allow_edit.php";
+            localStorage.clear();
+        });
     });
-}
-
-if(+localStorage.getItem("sended") >= 50){
-    checkSended();
 } else{
-    chrome.storage.sync.get("switch").then(v=>v.switch).then(v=>v===true?script():false)
+    chrome.storage.sync.get("switch").then(v=>v.switch).then(v=>v===true?script():false);
 }
-
 
 const script = () => {
     const url = document.location;
@@ -21,15 +20,13 @@ const script = () => {
     const regexId = /=\w{5,7}-\w{1,5}/;
     const sendButton = document.querySelector("input[name='sendmailsub']");
 
-    const delay = async (ms) => await new Promise(resolve => setTimeout(resolve, ms));
-
     const closeOnMaxOrError = () => {
         const p = document.querySelector("p");
-        if(!!p? p.innerText.indexOf("to maximum quantity")>-1 : false){
+        if(!!p? p.innerText.indexOf("to maximum quantity")>-1 : false){ 
             localStorage.setItem("sended", "50");
-        } else {window.close()}
+        } else {chrome.runtime.sendMessage({method:"closeTab"});}    
     }
-    
+
     const insertGirlId = () => {
         let girlId = prompt("Введите ID девушки");
         if(!!localStorage.sended){
@@ -72,22 +69,24 @@ const script = () => {
 
     const switchPage = () => {
         if(+localStorage.getItem("sended") >= 50){
-            chrome.runtime.sendMessage({method: "closeTabs"}, ()=>window.reload());
-        }
-        const nextButton = document.querySelectorAll("table")[25].children[0].children[0].children[1].children[3];
-        const firstButton = document.querySelectorAll("table")[25].children[0].children[0].children[1].children[1];
-        if(!nextButton.children[0]){
-            localStorage.setItem("ended", "true");
-        };
-        if(!!localStorage.getItem("ended")) {
-            if(!!firstButton.children[0]){
-                firstButton.click();
-            } else{
-                document.location.reload();
-            }
+            window.location.href="/clagt/woman/women_profiles_allow_edit.php";
         } else {
-            nextButton.click();
+            const nextButton = document.querySelectorAll("table")[25].children[0].children[0].children[1].children[3];
+            const firstButton = document.querySelectorAll("table")[25].children[0].children[0].children[1].children[1];
+            if(!nextButton.children[0]){
+                localStorage.setItem("ended", "true");
+            };
+            if(!!localStorage.getItem("ended")) {
+                if(!!firstButton.children[0]){
+                    firstButton.click();
+                } else{
+                    document.location.reload();
+                }
+            } else {
+                nextButton.click();
+            }
         }
+  
     }
 
     function getRandomInRange(min, max) {
@@ -119,7 +118,7 @@ const script = () => {
         }
         if(check===7){
             changeTypeOfLetter();
-        } else {window.close()}
+        } else {chrome.runtime.sendMessage({method:"closeTab"})}
     }
 
     const sendAdmire = () => {   
@@ -145,12 +144,13 @@ const script = () => {
 
         case "/clagt/admire/search_matches3.php" :
             openAllMen();
-            delay(23000).then(() => switchPage());
+            delay(7000).then(() => switchPage());
             break;
 
-        case "/clagt/admire/adr_succ2.php":
-            window.close();
+        case "/clagt/admire/adr_succ2.php": {
+            chrome.runtime.sendMessage({method:"closeTab"});
             break;
+        }
     }
 
     if(!!sendButton){
